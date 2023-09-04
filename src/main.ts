@@ -8,6 +8,8 @@ import { TYPES } from './types';
 import { IExceptionFilter } from './errors/exception.filter.interface';
 import 'reflect-metadata';
 import { IUserInterface } from './users/users.interface';
+import { IUserService } from './users/users.service.interface';
+import { UserService } from './users/users.service';
 
 export interface IBootstrapReturn {
   appContainer: Container;
@@ -18,6 +20,7 @@ export const appBindings = new ContainerModule((bind: interfaces.Bind) => {
   bind<ILogger>(TYPES.ILogger).to(LoggerService);
   bind<IExceptionFilter>(TYPES.ExceptionFilter).to(ExceptionFilter);
   bind<IUserInterface>(TYPES.UserController).to(UserController);
+  bind<IUserService>(TYPES.UserService).to(UserService);
   bind<App>(TYPES.Application).to(App);
 });
 
