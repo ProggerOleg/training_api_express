@@ -24,12 +24,25 @@ export class UserController extends BaseController implements IUserInterface {
         func: this.register,
         middlewares: [new ValidateMiddleware(UserRegisterDto)],
       },
-      { path: '/login', method: 'post', func: this.login },
+      {
+        path: '/login',
+        method: 'post',
+        func: this.login,
+        middlewares: [new ValidateMiddleware(UserLoginDto)],
+      },
     ]);
   }
 
-  login(req: Request<{}, {}, UserLoginDto>, res: Response, next: NextFunction): void {
-    next(new HTTPError(401, 'Ошибка авторизации', 'login'));
+  async login(
+    { body }: Request<{}, {}, UserLoginDto>,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    const isCorrect = await this.userService.validateUser(body);
+    if (!isCorrect) {
+      return next(new HTTPError(401, 'Неправильно указано имя пользователя или пароль'));
+    }
+    this.ok(res, 'Вы успешно вошли в систему');
   }
 
   async register(
@@ -41,6 +54,6 @@ export class UserController extends BaseController implements IUserInterface {
     if (!result) {
       return next(new HTTPError(422, 'Такой пользователь уже существует'));
     }
-    this.ok(res, { email: result.email });
+    this.ok(res, { email: result.email, id: result.id });
   }
 }
