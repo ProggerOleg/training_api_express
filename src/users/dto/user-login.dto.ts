@@ -5,6 +5,4 @@ export class UserLoginDto {
   email: string;
   @IsString({ message: 'Неправильный пароль' })
   password: string;
-  @IsString({ message: 'Неправильное имя пользователя' })
-  name: string;
 }
