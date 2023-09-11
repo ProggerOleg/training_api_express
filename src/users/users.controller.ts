@@ -53,7 +53,7 @@ export class UserController extends BaseController implements IUserInterface {
       return next(new HTTPError(401, 'Неправильно указано имя пользователя или пароль'));
     }
     const jwt = await this.signJWT(req.body.email, this.configService.get('SECRET'));
-    this.ok(res, `Вы успешно вошли в систему  ${jwt}`);
+    this.ok(res, `${jwt}`);
   }
 
   async register(
